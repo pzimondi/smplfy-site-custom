@@ -853,21 +853,20 @@ body.single-gravityview .gv-table-view-content > tbody > tr:not([id$="edit_link"
 }
 body.single-gravityview .gv-table-view-content > tbody > tr > td > :is(h1, h2, h3, h4):first-child { margin-top: 0 !important; }
 
-/* Pseudo-headings. Fields 225, 190 and 135 mark their sub-headings as
-   `<p><strong>1. Lead Capture</strong></p>` rather than a real heading,
-   so without this the same document level looks different from field to
-   field. Matched on shape, not on field id. */
-body.single-gravityview .gv-table-view-content > tbody > tr > td > p:has(> strong:only-child) {
-  margin: 20px 0 8px !important;
-  font-size: 12px !important;
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-body.single-gravityview .gv-table-view-content > tbody > tr > td > p:has(> strong:only-child) > strong {
-  font-family: var(--sb-disp, inherit);
-  font-weight: 700 !important;
-  color: var(--sb-green-d, #178C48) !important;
-}
+/* NOTE — pseudo-headings, deliberately NOT styled.
+   Fields 225, 190 and 135 mark sub-headings as
+   `<p><strong>1. Lead Capture</strong></p>`. A rule matching
+   `p:has(> strong:only-child)` looked right and was WRONG: `:only-child`
+   counts ELEMENT children only, so an ordinary paragraph carrying one
+   inline bold phrase — `<p>As a lean… <strong>low-cost, high-return
+   channels</strong> that reinforce…</p>` — matched too, and
+   text-transform inherited to the whole paragraph, uppercasing the body
+   copy of Budget and Success Metrics.
+
+   CSS cannot distinguish the two: there is no selector for "the strong
+   has no text siblings". So these render as ordinary bold paragraphs.
+   The durable fix is content-side — mark those lines as real headings
+   in the editor and they pick up the h3 treatment above automatically. */
 
 /* ---------- Nested lists ----------
    `td ul` above is a DESCENDANT rule, so a ul inside an li inherits the
